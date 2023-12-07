@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 # 1/  Option 1: if you added hello_imgui as a submodule, you can add it to your project with:
 #     add_subdirectory(path/to/hello_imgui)
 
-# 2/  Option 1: simply fetch hello_imgui during the build
+# 2/  Option 2: simply fetch hello_imgui during the build
 if (NOT TARGET hello_imgui)
     message(STATUS "Fetching hello_imgui")
     include(FetchContent)
