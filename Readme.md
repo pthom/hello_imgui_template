@@ -1,17 +1,21 @@
-# How to integrate HelloImGui into your application
+# hello_imgui_template: get started with HelloImGui in 5 minutes 
 
-This directory is a **standalone** demonstration on how to easily integrate HelloImGui to your own project.
-This means that you can copy-paste this folder in your project, and it will build, with no extra step!
-No manual download or git clone is required.
+This template demonstrates how to easily integrate HelloImGui to your own project. 
 
+You can use it as a starting point for your own project.
+
+Template repository: https://github.com/pthom/hello_imgui_template
 
 ## Explanations
 
 ### CMake
 
-The [CMakeLists.txt](CMakeLists.txt) file will download and build hello_imgui at configure time, and make the "hello_imgui_add_app" cmake function available.
+The [CMakeLists.txt](CMakeLists.txt) file will download and build hello_imgui at configure time, and make the "hello_imgui_add_app" cmake function available. 
 
-*Note: hello_imgui_add_app will automatically link your app to hello_imgui, and will embed the assets folder (for desktop, mobile, and emscripten apps)*
+By default, you do not need to add HelloImGui as a dependency to your project, it will be downloaded and built automatically during CMake configure time.
+If you wish to use a local copy of HelloImGui, edit CMakeLists.txt and uncomment the `add_subdirectory` line.
+
+*Note: `hello_imgui_add_app` will automatically link your app to hello_imgui, embed the assets folder (for desktop, mobile, and emscripten apps), and the application icon.*
 
 ### Assets
  
