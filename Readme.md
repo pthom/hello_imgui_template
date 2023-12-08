@@ -32,8 +32,11 @@ assets/
 │    │                          # and at least 256x256. It will  be converted
 │    │                          # to the right format, for each platform.
 │    ├── apple/
-│    │    └── Info.plist        # macOS and iOS app settings
-│    │                          # (or Info.ios.plist + Info.macos.plist)
+│    │    │── Info.plist        # macOS and iOS app settings
+│    │    │                      # (or Info.ios.plist + Info.macos.plist)
+│    │    └── Resources/
+│    │         └── ios/          # iOS specific settings: storyboard
+│    │             └── LaunchScreen.storyboard
 │    └── emscripten/
 │        ├── shell.emscripten.html # Emscripten shell file
 │        │                         #   (this file will be cmake "configured"
