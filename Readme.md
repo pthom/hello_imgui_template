@@ -30,19 +30,26 @@ assets/
 ├── app_settings/               # Application settings
 │    ├── icon.png               # This will be the app icon, it should be square
 │    │                          # and at least 256x256. It will  be converted
-│    │                          # to the right format, for each platform.
+│    │                          # to the right format, for each platform (except Android)
 │    ├── apple/
-│    │    │── Info.plist        # macOS and iOS app settings
+│    │    │── Info.plist         # macOS and iOS app settings
 │    │    │                      # (or Info.ios.plist + Info.macos.plist)
 │    │    └── Resources/
-│    │         └── ios/          # iOS specific settings: storyboard
-│    │             └── LaunchScreen.storyboard
+│    │      └── ios/             # iOS specific settings: storyboard
+│    │        └── LaunchScreen.storyboard
+│    │
+│    ├── android/                # Android app settings: any file placed here will be deployed 
+│    │   │── AndroidManifest.xml # (Optional manifest, HelloImGui will generate one if missing)
+│    │   └── res/                
+│    │       └── mipmap-xxxhdpi/ # Optional icons for different resolutions
+│    │           └── ...         # Use Android Studio to generate them: 
+│    │                           # right click on res/ => New > Image Asset
 │    └── emscripten/
-│        ├── shell.emscripten.html # Emscripten shell file
-│        │                         #   (this file will be cmake "configured"
-│        │                         #    to add the name and favicon) 
-│        └── custom.js             # Any custom file here will be deployed
-│                                  #   in the emscripten build folder
+│      ├── shell.emscripten.html # Emscripten shell file
+│      │                         #   (this file will be cmake "configured"
+│      │                         #    to add the name and favicon) 
+│      └── custom.js             # Any custom file here will be deployed
+│                                #   in the emscripten build folder
 │
 ├── fonts/
 │    ├── DroidSans.ttf           # Default fonts
