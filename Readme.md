@@ -123,14 +123,7 @@ Add this line at the top of your CMakeLists.txt
 add_subdirectory(external/hello_imgui)
 ```
 
-#### 2. Download SDL
-Run the following command to download SDL2:
-
-```bash
-./external/hello_imgui/tools/sdl_download.sh
-```
-
-#### 3. Create the Android Studio project
+#### 2. Create the Android Studio project
 ```bash
 # Set the ANDROID_HOME and ANDROID_NDK_HOME environment variables
 # For example:
@@ -141,13 +134,13 @@ mkdir build_android && cd build_android
 ../external/hello_imgui/tools/android/cmake_arm-android.sh ../
 ```
 
-#### 4. Open the project in Android Studio
+#### 3. Open the project in Android Studio
 It should be located in build_android/hello_world_AndroidStudio.
 
 
 ### Build for iOS
 
-#### 1. Clone hello_imgui and download SDL: follow steps 1 and 2 from the Android section above.
+#### 1. Clone hello_imgui: follow steps 1 from the Android section above.
 
 #### 2. Create the Xcode project
 ```bash
