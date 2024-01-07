@@ -32,5 +32,5 @@ jobs:
       run: |
         mkdir build 
         cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release
+        cmake .. -DHELLOIMGUI_DOWNLOAD_FREETYPE_IF_NEEDED=ON -DCMAKE_BUILD_TYPE=Release
         cmake --build . --config Release
