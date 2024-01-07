@@ -17,16 +17,22 @@ If you wish to use a local copy of HelloImGui, edit CMakeLists.txt and uncomment
 
 *Note: `hello_imgui_add_app` will automatically link your app to hello_imgui, embed the assets folder (for desktop, mobile, and emscripten apps), and the application icon.*
 
-### Assets
+### Assets folder structure
  
 
-Anything in the assets/ folder located beside the app's CMakeLists will be bundled together with the app (for macOS, iOS, Android, Emscripten).
-The files in assets/app_settings/ will be used to generate the app icon, and the app settings.
+Anything in the assets/ folder located beside the app's CMakeLists will be bundled 
+together with the app (for macOS, iOS, Android, Emscripten).
+The files in assets/app_settings/ will be used to generate the app icon, 
+and the app settings.
 
 ```
 assets/
-├── world.jpg                   # A custom asset
-│
+├── world.jpg                   # A custom asset. Any file or folder here will be deployed 
+│                               # with the app.
+├── fonts/
+│    ├── DroidSans.ttf           # Default fonts used by HelloImGui
+│    └── fontawesome-webfont.ttf # (if not found, the default ImGui font will be used)
+│               
 ├── app_settings/               # Application settings
 │    ├── icon.png               # This will be the app icon, it should be square
 │    │                          # and at least 256x256. It will  be converted
@@ -50,10 +56,6 @@ assets/
 │      │                         #    to add the name and favicon) 
 │      └── custom.js             # Any custom file here will be deployed
 │                                #   in the emscripten build folder
-│
-├── fonts/
-│    ├── DroidSans.ttf           # Default fonts
-│    └── fontawesome-webfont.ttf #   used by HelloImGui
 ```
 
 ## Build instructions
