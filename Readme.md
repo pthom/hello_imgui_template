@@ -168,7 +168,7 @@ Then, open the XCode project in build_ios/helloworld_with_helloimgui.xcodeproj
 ### Build for emscripten
 
 #### Install emscripten
-You can either install emsdk following [the instruction on the emscripten website](https://emscripten.org/docs/getting_started/downloads.html) or you can use the script [../tools/emscripten/install_emscripten.sh](../tools/emscripten/install_emscripten.sh).
+You can either install emsdk following [the instruction on the emscripten website](https://emscripten.org/docs/getting_started/downloads.html) or you can use the script [hello_imgui/tools/emscripten/install_emscripten.sh](https://github.com/pthom/hello_imgui/blob/master/tools/emscripten/install_emscripten.sh).
 
 #### Compile with emscripten
 
