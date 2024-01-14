@@ -5,7 +5,9 @@ set(CMAKE_CXX_STANDARD 17)
 # Build hello_imgui
 # =================
 # 1/  Option 1: if you added hello_imgui as a subfolder, you can add it to your project with:
-#     add_subdirectory(external/hello_imgui)
+if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/external/hello_imgui)
+    add_subdirectory(external/hello_imgui)
+endif()
 
 # 2/  Option 2: simply fetch hello_imgui during the build
 if (NOT TARGET hello_imgui)

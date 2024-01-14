@@ -111,7 +111,6 @@ It should be located in build/helloworld_with_helloimgui.sln
 #### 1. Clone hello_imgui:
 You will need to clone hello_imgui. In this example, we clone hello_imgui inside hello_imgui_template/external/hello_imgui
 
-Note: external/ is mentioned in .gitignore
 
 ```bash
 mkdir -p external && cd external
@@ -119,11 +118,10 @@ git clone https://github.com/pthom/hello_imgui.git
 cd ..
 ```
 
-Add this line at the top of your CMakeLists.txt
+Notes: 
+* `external/` is mentioned in .gitignore
+* the main CMakeList will detect the presence of hello_imgui in `external/hello_imgui`, and will use it instead of downloading it.
 
-```cmake
-add_subdirectory(external/hello_imgui)
-```
 
 #### 2. Create the Android Studio project
 ```bash
