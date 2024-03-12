@@ -202,7 +202,7 @@ source ~/emsdk/emsdk_env.sh
 # cmake and build
 mkdir build_emscripten
 cd build_emscripten
-emcmake cmake ..
+emcmake cmake .. -DCMAKE_BUILD_TYPE=Release  # or Debug (Release builds lead to smaller files)
 make -j 4
 
 # launch a webserver
