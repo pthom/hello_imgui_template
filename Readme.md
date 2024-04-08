@@ -164,7 +164,14 @@ It should be located in build_android/hello_world_AndroidStudio.
 
 ### Build for iOS
 
-#### 1. Clone hello_imgui: follow steps 1 from the Android section above.
+#### 1. Clone hello_imgui with its submodules
+
+```bash
+mkdir -p external && cd external
+git clone --recurse-submodules https://github.com/pthom/hello_imgui.git
+cd ..
+```
+
 
 #### 2. Create the Xcode project
 ```bash
@@ -178,11 +185,11 @@ and com.your_website with your website (e.g. com.mycompany).
 cmake .. \
 -GXcode \
 -DCMAKE_TOOLCHAIN_FILE=../external/hello_imgui/hello_imgui_cmake/ios-cmake/ios.toolchain.cmake \
+-DHELLOIMGUI_USE_SDL2=ON \
+-DHELLOIMGUI_HAS_OPENGL3=ON \
 -DPLATFORM=OS64COMBINED \
 -DCMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM=XXXXXXXXX \
--DHELLO_IMGUI_BUNDLE_IDENTIFIER_URL_PART=com.your_website \
--DHELLOIMGUI_USE_SDL2=ON
--DHELLOIMGUI_HAS_OPENGL3=ON
+-DHELLO_IMGUI_BUNDLE_IDENTIFIER_URL_PART=com.your_website
 ```
 
 Then, open the XCode project in build_ios/helloworld_with_helloimgui.xcodeproj
