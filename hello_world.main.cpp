@@ -2,6 +2,9 @@
 
 int main(int , char *[])
 {
+#ifdef ASSETS_LOCATION
+    HelloImGui::SetAssetsFolder(ASSETS_LOCATION);
+#endif
     auto guiFunction = []() {
         ImGui::Text("Hello, ");                    // Display a simple label
         HelloImGui::ImageFromAsset("world.jpg");   // Display a static image
