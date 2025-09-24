@@ -1,36 +1,40 @@
-name: "CI Multiplatform Build"
-
-# This is an example of a CI workflow that builds the project on all desktop platforms
+name: Build Windows VS-Project Archive
 
 on:
-  workflow_dispatch:
-  pull_request:
+  workflow_dispatch:      # 手动触发
   push:
+    branches: [ main ]    # 也可按需保留或删除
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build:
-    name: "CI Multiplatform Build"
-    runs-on: ${{ matrix.platform }}
-    strategy:
-      fail-fast: false
-      matrix:
-        platform: [windows-latest, macos-latest, ubuntu-latest]
-
+  windows-vs-project:
+    runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: true
+      # 1. 拉代码（含子模块）
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
 
-#    - name: Setup interactive tmate session
-#      uses: mxschmitt/action-tmate@v3
+      # 2. 生成 VS 工程文件（不编译）
+      - name: Configure CMake for Visual Studio
+        run: |
+          cmake -B build ^
+                -G "Visual Studio 17 2022" ^
+                -A x64 ^
+                -DHELLOIMGUI_DOWNLOAD_FREETYPE_IF_NEEDED=ON
 
-    - name: apt install xorg-dev  libglfw3-dev (ubuntu only)
-      if: ${{ matrix.platform == 'ubuntu-latest' }}
-      run: sudo apt-get update && sudo apt-get install -y xorg-dev  libglfw3-dev
+      # 3. 打包整个 build 目录（含 .sln、.vcxproj、CMake 缓存等）
+      - name: Archive VS project
+        shell: pwsh
+        run: |
+          Compress-Archive -Path build\* -DestinationPath windows-vs-project.zip
 
-    - name: Build
-      run: |
-        mkdir build 
-        cd build
-        cmake .. -DHELLOIMGUI_DOWNLOAD_FREETYPE_IF_NEEDED=ON -DCMAKE_BUILD_TYPE=Release
-        cmake --build . --config Release
+      # 4. 上传成品，保留 90 天（可配置）
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-vs-project
+          path: windows-vs-project.zip
+          retention-days: 90
