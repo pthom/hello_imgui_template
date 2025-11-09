@@ -61,6 +61,7 @@ assets/
 │    ├── icon.png               # This will be the app icon, it should be square
 │    │                          # and at least 256x256. It will  be converted
 │    │                          # to the right format, for each platform (except Android)
+│    ├── icon.ico               # (optional Windows icon. Will be used as exe file icon if present)
 │    ├── apple/
 │    │    │── Info.plist         # macOS and iOS app settings
 │    │    │                      # (or Info.ios.plist + Info.macos.plist)
