@@ -1,221 +1,226 @@
-# hello_imgui_template: get started with HelloImGui in 5 minutes 
+# AppImage Build and Distribution Guide
 
-This template demonstrates how to easily integrate HelloImGui to your own project. 
+This document describes how to build and distribute the Hello World application as an AppImage for Linux systems.
 
-You can use it as a starting point for your own project.
+## What is AppImage?
 
-Template repository: https://github.com/pthom/hello_imgui_template
+AppImage is a portable application format for Linux that bundles an application with all its dependencies. Users can download and run it without installation, similar to a portable .exe on Windows.
 
-## Explanations
+## Building the AppImage
 
-### Get Hello ImGui with CMake
+### Prerequisites
 
-There are 3 ways to get HelloImGui with CMake. They are documented inside the CMakeLists.txt file.
-By default, option 2 below is used: HelloImGui is downloaded and built automatically at configure time.
+- Linux system (x86_64 or ARM64/aarch64)
+- CMake 3.12+
+- Build essentials (gcc, g++, make)
+- X11 development libraries
+- GLFW3 and FreeType development libraries
 
-#### Option 1: add hello_imgui as a dependency
-If you added hello_imgui as a subfolder, you can add it to your project with:
-```cmake
-add_subdirectory(external/hello_imgui)
-```
+### Option 1: Native Build (Current System)
 
-#### Option 2: automatic download
-The [CMakeLists.txt](CMakeLists.txt) file will download and build hello_imgui at configure time, and make the "hello_imgui_add_app" cmake function available, if hello-imgui is not found;
-
-By default, you do not need to add HelloImGui as a dependency to your project, it will be downloaded and built automatically during CMake configure time.
-If you wish to use a local copy of HelloImGui, edit CMakeLists.txt and uncomment the `add_subdirectory` line.
-
-*Note: `hello_imgui_add_app` will automatically link your app to hello_imgui, embed the assets folder (for desktop, mobile, and emscripten apps), and the application icon.*
-
-#### Option 3: via vcpkg
-You can install hello_imgui via vcpkg with:
-```bash
-vcpkg install "hello-imgui[opengl3-binding,glfw-binding]"
-```
-Then you can use it inside CMake with:
-```cmake
-find_package(hello-imgui CONFIG REQUIRED)
-hello_imgui_add_app(hello_world hello_world.main.cpp)
-```
-
-(note: the vcpkg package is named "hello-imgui" with a dash, not "hello_imgui")
-
-
-### Assets folder structure
- 
-
-Anything in the assets/ folder located beside the app's CMakeLists will be bundled 
-together with the app (for macOS, iOS, Android, Emscripten).
-The files in assets/app_settings/ will be used to generate the app icon, 
-and the app settings.
-
-```
-assets/
-├── world.jpg                   # A custom asset. Any file or folder here will be deployed 
-│                               # with the app.
-├── fonts/
-│    ├── DroidSans.ttf           # Default fonts used by HelloImGui
-│    └── fontawesome-webfont.ttf # (if not found, the default ImGui font will be used)
-│               
-├── app_settings/               # Application settings
-│    ├── icon.png               # This will be the app icon, it should be square
-│    │                          # and at least 256x256. It will  be converted
-│    │                          # to the right format, for each platform (except Android)
-│    ├── icon.ico               # (optional Windows icon. Will be used as exe file icon if present)
-│    ├── apple/
-│    │    │── Info.plist         # macOS and iOS app settings
-│    │    │                      # (or Info.ios.plist + Info.macos.plist)
-│    │    └── Resources/
-│    │      └── ios/             # iOS specific settings: storyboard
-│    │        └── LaunchScreen.storyboard
-│    │
-│    ├── android/                # Android app settings: any file placed here will be deployed 
-│    │   │── AndroidManifest.xml # (Optional manifest, HelloImGui will generate one if missing)
-│    │   └── res/                
-│    │       └── mipmap-xxxhdpi/ # Optional icons for different resolutions
-│    │           └── ...         # Use Android Studio to generate them: 
-│    │                           # right click on res/ => New > Image Asset
-│    └── emscripten/
-│      ├── shell.emscripten.html # Emscripten shell file
-│      │                         #   (this file will be cmake "configured"
-│      │                         #    to add the name and favicon) 
-│      └── custom.js             # Any custom file here will be deployed
-│                                #   in the emscripten build folder
-```
-
-## Build instructions
-
-### Build for Linux and macOS
-
-#### 1. Optional: clone hello_imgui
-
-_Note: This step is optional, since the CMakeLists.txt file will by default download and build hello_imgui at configure time._
-
-In this example, we clone hello_imgui inside `external/hello_imgui`
-
-Note: `external/` is mentioned in `.gitignore`
+Build directly on your system:
 
 ```bash
-mkdir -p external && cd external
-git clone https://github.com/pthom/hello_imgui.git
-cd ..
+./build_appimage.sh
 ```
 
-Add this line at the top of your CMakeLists.txt
+**Note**: The AppImage will be built against your current system's glibc version. It will only work on systems with the same or newer glibc.
 
-```cmake
-add_subdirectory(external/hello_imgui)
-```
+### Option 2: Docker Build (Recommended for Distribution)
 
-#### 2. Create the build directory, run cmake and make
+Build inside an Ubuntu 22.04 container for maximum compatibility:
 
 ```bash
-mkdir build && cd build
-cmake ..
-make -j 4
+./build_appimage_docker.sh
 ```
 
-### Build for Windows
+**Advantages**:
+- Builds against glibc 2.35 (Ubuntu 22.04)
+- Works on Ubuntu 22.04+ and equivalent distros from 2022 onwards
+- Reproducible builds regardless of your host system
+- Isolated environment with all dependencies
 
-#### 1. Optional: clone hello_imgui
-Follow step 1 from the Linux/macOS section above.
+**Requirements**:
+- Docker installed and running
+- User must be in the docker group: `sudo usermod -aG docker $USER`
 
-#### 2. Create the build directory, run cmake
+## Build Output
+
+After building, you'll get:
+
+- `Hello_World-{arch}.AppImage` - The distributable AppImage file
+- `appimage_build/` - Build artifacts directory (can be deleted, included in .gitignore)
+
+## Running the AppImage
+
+Simply make it executable and run:
 
 ```bash
-mkdir build && cd build
-cmake ..
+chmod +x Hello_World-*.AppImage
+./Hello_World-*.AppImage
 ```
 
-#### 3. Open the Visual Studio solution
-It should be located in build/helloworld_with_helloimgui.sln
+Or double-click it in a file manager.
 
+## Testing the AppImage
 
-### Build for Android
+### Quick Dependency Check
 
-#### 1. Clone hello_imgui:
-You will need to clone hello_imgui. In this example, we clone hello_imgui inside hello_imgui_template/external/hello_imgui
-
+Extract and inspect the AppImage without running:
 
 ```bash
-mkdir -p external && cd external
-git clone https://github.com/pthom/hello_imgui.git
-cd ..
+./Hello_World-*.AppImage --appimage-extract
+ldd squashfs-root/usr/bin/hello_world
+ls -R squashfs-root/usr/bin/assets/
+rm -rf squashfs-root
 ```
 
-Notes: 
-* `external/` is mentioned in .gitignore
-* the main CMakeList will detect the presence of hello_imgui in `external/hello_imgui`, and will use it instead of downloading it.
+### Test in Clean Environment (Docker)
 
-
-#### 2. Create the Android Studio project
-```bash
-# Set the ANDROID_HOME and ANDROID_NDK_HOME environment variables
-# For example:
-export ANDROID_HOME=/Users/YourName/Library/Android/sdk
-export ANDROID_NDK_HOME=/Users/YourName/Library/Android/sdk/ndk/26.1.10909125
-
-mkdir build_android && cd build_android
-../external/hello_imgui/tools/android/cmake_arm-android.sh ../
-```
-
-#### 3. Open the project in Android Studio
-It should be located in build_android/hello_world_AndroidStudio.
-
-
-### Build for iOS
-
-#### 1. Clone hello_imgui with its submodules
+Test on Ubuntu 22.04:
 
 ```bash
-mkdir -p external && cd external
-git clone --recurse-submodules https://github.com/pthom/hello_imgui.git
-cd ..
+docker run -it --rm \
+  -v $(pwd):/app \
+  -e DISPLAY=$DISPLAY \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  --device /dev/dri \
+  --device /dev/fuse \
+  --cap-add SYS_ADMIN \
+  --security-opt apparmor:unconfined \
+  ubuntu:22.04 bash
+
+# Inside container:
+apt update && apt install -y libgl1 libxcb1 libxcursor1 libxi6 libxrandr2 fuse
+cd /app
+./Hello_World-*.AppImage
 ```
 
-
-#### 2. Create the Xcode project
-```bash
-mkdir build_ios && cd build_ios
-```
-
-Run CMake with the following command, where you replace XXXXXXXXX with your Apple Developer Team ID,
-and com.your_website with your website (e.g. com.mycompany).
-
-```bash
-cmake .. \
--GXcode \
--DCMAKE_TOOLCHAIN_FILE=../external/hello_imgui/hello_imgui_cmake/ios-cmake/ios.toolchain.cmake \
--DHELLOIMGUI_USE_SDL2=ON \
--DHELLOIMGUI_HAS_OPENGL3=ON \
--DPLATFORM=OS64COMBINED \
--DHELLOIMGUI_FREETYPE_STATIC=ON \
--DCMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM=XXXXXXXXX \
--DHELLO_IMGUI_BUNDLE_IDENTIFIER_URL_PART=com.your_website
-```
-
-Then, open the XCode project in build_ios/helloworld_with_helloimgui.xcodeproj
-
-
-### Build for emscripten
-
-#### Install emscripten
-You can either install emsdk following [the instruction on the emscripten website](https://emscripten.org/docs/getting_started/downloads.html) or you can use the script [hello_imgui/tools/emscripten/install_emscripten.sh](https://github.com/pthom/hello_imgui/blob/master/tools/emscripten/install_emscripten.sh).
-
-#### Compile with emscripten
+Test on Ubuntu 24.04 (or newer):
 
 ```bash
-# Add emscripten tools to your path
-source ~/emsdk/emsdk_env.sh
-
-# cmake and build
-mkdir build_emscripten
-cd build_emscripten
-emcmake cmake .. -DCMAKE_BUILD_TYPE=Release  # or Debug (Release builds lead to smaller files)
-make -j 4
-
-# launch a webserver
-python3 -m http.server
+# Same command but with ubuntu:24.04
 ```
 
-Open a browser, and navigate to [http://localhost:8000](http://localhost:8000).
+## Desktop Integration
+
+By default, AppImages don't integrate with the system (no menu entry or taskbar icon). Users have two options:
+
+### Option 1: Manual Desktop Entry
+
+Users can create a desktop entry manually:
+
+```bash
+mkdir -p ~/.local/share/applications
+cat > ~/.local/share/applications/hello_world.desktop << EOF
+[Desktop Entry]
+Type=Application
+Name=Hello World
+Comment=HelloImGui Demo Application
+Exec=/full/path/to/Hello_World-*.AppImage
+Icon=/full/path/to/icon.png
+Categories=Utility;Graphics;
+Terminal=false
+EOF
+```
+
+### Option 2: AppImageLauncher
+
+Recommend users install [AppImageLauncher](https://github.com/TheAssassin/AppImageLauncher), which automatically integrates AppImages when first run.
+
+## Distribution
+
+### Compatibility
+
+The AppImage is compatible with:
+- **Built with docker**: Ubuntu 22.04+ and equivalent distributions (2022 onwards)
+- **Built natively**: Systems with glibc version ≥ your build system
+
+### Bundled Libraries
+
+The AppImage bundles:
+- ✅ libglfw (window/input handling)
+- ✅ libfreetype (font rendering)
+- ✅ libpng, libbz2, libbrotli, libz (freetype dependencies)
+- ❌ X11 libraries (expected to be present on target system)
+- ❌ OpenGL libraries (expected to be present on target system)
+
+### File Size
+
+Typical AppImage size: ~20-30 MB (includes all bundled libraries and assets)
+
+## Architecture Support
+
+The build scripts automatically detect the host architecture:
+- **x86_64**: Intel/AMD 64-bit systems
+- **aarch64/arm64**: ARM 64-bit systems (Apple Silicon via VM, Raspberry Pi 4+, etc.)
+
+Cross-compilation is not currently supported - build on the target architecture.
+
+## Troubleshooting
+
+### FUSE errors
+
+If you see "Cannot mount AppImage, please check your FUSE setup":
+
+```bash
+# Extract and run directly
+./Hello_World-*.AppImage --appimage-extract
+./squashfs-root/AppRun
+```
+
+### glibc version errors
+
+If you see "version `GLIBC_X.XX' not found":
+- The AppImage was built on a newer system than the target
+- Solution: Rebuild using `build_appimage_docker.sh` for Ubuntu 22.04 compatibility
+
+### Missing libraries
+
+If you see "cannot open shared object file":
+- Install the missing library on your system
+- Common: `libgl1`, `libxcb1`, `libxcursor1`, `libxi6`, `libxrandr2`
+
+## Build Artifacts
+
+All build artifacts are organized in the `appimage_build/` directory:
+- `appimage_build/build/` - CMake build directory
+- `appimage_build/install/` - Installation directory
+- `appimage_build/AppDir/` - AppImage directory structure
+- `appimage_build/linuxdeploy-*.AppImage` - LinuxDeploy tool
+
+This directory is gitignored and can be safely deleted. It will be recreated on each build.
+
+## Technical Details
+
+### Build Process
+
+1. Configure CMake with Release build type
+2. Build the hello_world executable
+3. Install to `appimage_build/install/`
+4. Create AppDir structure with executable, assets, and libraries
+5. Download linuxdeploy tool (architecture-specific)
+6. Bundle dependencies and create AppImage
+7. Move final AppImage to project root
+
+### Assets
+
+Assets are copied from the installation directory and placed next to the executable inside the AppImage:
+```
+AppDir/
+└── usr/
+    └── bin/
+        ├── hello_world
+        └── assets/
+            ├── app_settings/
+            ├── fonts/
+            └── world.jpg
+```
+
+The application expects assets to be in this relative location.
+
+## Further Reading
+
+- [AppImage Documentation](https://docs.appimage.org/)
+- [LinuxDeploy Documentation](https://github.com/linuxdeploy/linuxdeploy)
+- [HelloImGui Documentation](https://pthom.github.io/hello_imgui/)

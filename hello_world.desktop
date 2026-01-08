@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Hello World
+Comment=HelloImGui Demo Application
+Exec=hello_world
+Icon=hello_world
+Categories=Utility;Graphics;
+Terminal=false

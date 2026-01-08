@@ -1,3 +1,8 @@
 build*/
 cmake-build-*/
 external/
+
+# AppImage build artifacts
+appimage_build/
+*.AppImage
+linuxdeploy-*.AppImage
