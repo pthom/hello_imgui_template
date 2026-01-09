@@ -50,7 +50,7 @@ else()
     # Disable HelloImGui default install behavior
     set(HELLOIMGUI_ADD_APP_WITH_INSTALL OFF CACHE BOOL "" FORCE)
 
-    imgui_bundle_add_app(hello_world_ hello_world.main.cpp)
+    hello_imgui_add_app(hello_world_ hello_world.main.cpp)
 
     # If not portable, we have to
     # - install the app manually
@@ -61,10 +61,13 @@ else()
         include(GNUInstallDirs)
         install(TARGETS hello_world_ DESTINATION ${CMAKE_INSTALL_BINDIR})
         set(assets_install_dir ${CMAKE_INSTALL_DATADIR}/hello_world_)
-        if (NOT IS_ABSOLUTE ${assets_install_dir})
-            set(assets_install_dir ${CMAKE_INSTALL_PREFIX}/${assets_install_dir})
-        endif()
         install(DIRECTORY assets DESTINATION ${assets_install_dir})
-        target_compile_definitions(imgui_bundle_example_integration PRIVATE ASSETS_LOCATION="${assets_install_dir}/assets")
+        
+        # Calculate relative path from bin to assets and pass to HelloImGui,
+        # which will resolve it relative to the executable location at runtime.
+        file(RELATIVE_PATH assets_relative_to_bin 
+             "/${CMAKE_INSTALL_BINDIR}" 
+             "/${assets_install_dir}/assets")
+        target_compile_definitions(hello_world_ PRIVATE ASSETS_LOCATION="${assets_relative_to_bin}")
     endif()
 endif()
