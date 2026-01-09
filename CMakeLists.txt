@@ -1,19 +1,20 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.28)
 project(helloworld_with_helloimgui)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Build hello_imgui
 # =================
 # 1/  Option 1: if you added hello_imgui as a subfolder, you can add it to your project with:
 if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/external/hello_imgui)
-    add_subdirectory(external/hello_imgui)
+    add_subdirectory(external/hello_imgui EXCLUDE_FROM_ALL)
 endif()
 
 # 2/  Option 2: simply fetch hello_imgui during the build
 if (NOT TARGET hello_imgui)
     message(STATUS "Fetching hello_imgui")
     include(FetchContent)
-    FetchContent_Declare(hello_imgui GIT_REPOSITORY https://github.com/pthom/hello_imgui.git GIT_TAG master)
+    FetchContent_Declare(hello_imgui GIT_REPOSITORY https://github.com/pthom/hello_imgui.git GIT_TAG master EXCLUDE_FROM_ALL)
     FetchContent_MakeAvailable(hello_imgui)
 endif()
 
