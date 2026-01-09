@@ -57,17 +57,15 @@ else()
     # - install the assets manually
     # - pass the assets location to the app, and set this assets location in main() via the compile definition ASSETS_LOCATION:
     #     #ifdef ASSETS_LOCATION \n HelloImGui::SetAssetsFolder(ASSETS_LOCATION); \n #endif
-    if (NOT EXAMPLE_INTEGRATION_PORTABLE_INSTALL)
-        include(GNUInstallDirs)
-        install(TARGETS hello_world_ DESTINATION ${CMAKE_INSTALL_BINDIR})
-        set(assets_install_dir ${CMAKE_INSTALL_DATADIR}/hello_world_)
-        install(DIRECTORY assets DESTINATION ${assets_install_dir})
-        
-        # Calculate relative path from bin to assets and pass to HelloImGui,
-        # which will resolve it relative to the executable location at runtime.
-        file(RELATIVE_PATH assets_relative_to_bin 
-             "/${CMAKE_INSTALL_BINDIR}" 
-             "/${assets_install_dir}/assets")
-        target_compile_definitions(hello_world_ PRIVATE ASSETS_LOCATION="${assets_relative_to_bin}")
-    endif()
+    include(GNUInstallDirs)
+    install(TARGETS hello_world_ DESTINATION ${CMAKE_INSTALL_BINDIR})
+    set(assets_install_dir ${CMAKE_INSTALL_DATADIR}/hello_world_)
+    install(DIRECTORY assets DESTINATION ${assets_install_dir})
+    
+    # Calculate relative path from bin to assets and pass to HelloImGui,
+    # which will resolve it relative to the executable location at runtime.
+    file(RELATIVE_PATH assets_relative_to_bin 
+            "/${CMAKE_INSTALL_BINDIR}" 
+            "/${assets_install_dir}/assets")
+    target_compile_definitions(hello_world_ PRIVATE ASSETS_LOCATION="${assets_relative_to_bin}")
 endif()
