@@ -22,7 +22,7 @@ endif()
 # i/ You can install hello_imgui via vcpkg with:
 #     vcpkg install "hello-imgui[opengl3-binding,glfw-binding]"
 # ii/ Then you can use it inside CMake with:
-#     find_package(hello-imgui CONFIG REQUIRED)
+#     find_package(hello_imgui CONFIG REQUIRED)
 
 
 # Build your app

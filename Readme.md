@@ -20,7 +20,7 @@ add_subdirectory(external/hello_imgui)
 ```
 
 #### Option 2: automatic download
-The [CMakeLists.txt](CMakeLists.txt) file will download and build hello_imgui at configure time, and make the "hello_imgui_add_app" cmake function available, if hello-imgui is not found;
+The [CMakeLists.txt](CMakeLists.txt) file will download and build hello_imgui at configure time, and make the "hello_imgui_add_app" cmake function available, if hello_imgui is not found;
 
 By default, you do not need to add HelloImGui as a dependency to your project, it will be downloaded and built automatically during CMake configure time.
 If you wish to use a local copy of HelloImGui, edit CMakeLists.txt and uncomment the `add_subdirectory` line.
@@ -34,11 +34,11 @@ vcpkg install "hello-imgui[opengl3-binding,glfw-binding]"
 ```
 Then you can use it inside CMake with:
 ```cmake
-find_package(hello-imgui CONFIG REQUIRED)
+find_package(hello_imgui CONFIG REQUIRED)
 hello_imgui_add_app(hello_world hello_world.main.cpp)
 ```
 
-(note: the vcpkg package is named "hello-imgui" with a dash, not "hello_imgui")
+(note: the vcpkg port is named "hello-imgui" with a dash, since vcpkg forbids underscores in port names; the CMake package is "hello_imgui")
 
 
 ### Assets folder structure
